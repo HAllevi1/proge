@@ -1,0 +1,83 @@
+def loe_failist_andmed(failinimi):
+    """
+    Loeb failist kontserdisaali andmed.
+    Tagastab kahemõõtmelise järjendi kohtade seisuga ja klasside ridade sõnastiku.
+    """
+    koha_seis = []
+    klasside_read = {}
+
+    with open(failinimi, 'r', encoding='utf-8') as fail:
+        for i, rida in enumerate(fail):
+            osad = rida.strip().split()
+            klass = osad[0]
+            read = list(osad[1])
+            koha_seis.append(read)
+
+            if klass not in klasside_read:
+                klasside_read[klass] = set()
+            klasside_read[klass].add(i)
+
+    return koha_seis, klasside_read
+
+def kirjuta_faili_andmed(failinimi, koha_seis, klasside_read):
+    """
+    Kirjutab uuendatud andmed tagasi faili.
+    """
+    with open(failinimi, 'w', encoding='utf-8') as fail:
+        for klass, read in klasside_read.items():
+            for rida in read:
+                fail.write(f"{klass} {''.join(koha_seis[rida])}\n")
+
+def leia_vabad_kohad(koha_seis, klasside_read, klass, kohtade_arv):
+    """
+    Leiab esimese rea, kus on kõrvuti piisavalt vabu kohti, ja tagastab need.
+    """
+    if klass not in klasside_read:
+        return None
+
+    for rida_index in klasside_read[klass]:
+        rida = koha_seis[rida_index]
+        vabu_kohte = 0
+        algus = -1
+
+        for i, koht in enumerate(rida):
+            if koht == '-':
+                if vabu_kohte == 0:
+                    algus = i
+                vabu_kohte += 1
+                if vabu_kohte == kohtade_arv:
+                    return rida_index, algus
+            else:
+                vabu_kohte = 0
+
+    return None
+
+def uuenda_kohad(koha_seis, rida_index, algus, kohtade_arv):
+    """
+    Uuendab kohtade seisu pärast piletite müüki.
+    """
+    for i in range(algus, algus + kohtade_arv):
+        koha_seis[rida_index][i] = 'x'
+
+def main():
+    failinimi = input("Sisestage failinimi: ")
+    koha_seis, klasside_read = loe_failist_andmed(failinimi)
+
+    ostja_klass = input("Sisestage oma klass: ")
+    piletite_arv = int(input("Mitu piletit soovite osta? "))
+
+    tulemus = leia_vabad_kohad(koha_seis, klasside_read, ostja_klass, piletite_arv)
+
+    if tulemus is None:
+        print("Teie klassi ridades ei ole piisavalt kõrvutisi vabu kohti või klassil puuduvad read.")
+    else:
+        rida_index, algus = tulemus
+        uuenda_kohad(koha_seis, rida_index, algus, piletite_arv)
+        kirjuta_faili_andmed(failinimi, koha_seis, klasside_read)
+
+        kohad = [(rida_index + 1, algus + i + 1) for i in range(piletite_arv)]
+        print("Teie piletid on järgmistes kohtades:", kohad)
+
+if __name__ == "__main__":
+    main()
+
