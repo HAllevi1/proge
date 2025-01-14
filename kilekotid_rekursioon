@@ -1,0 +1,7 @@
+def kilekotte(n):
+    if n == 0:
+        return 0
+    elif n % 3 == 1:
+        return kilekotte(n-1) + 2
+    else:
+        return kilekotte(n-1) + 1
