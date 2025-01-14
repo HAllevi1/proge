@@ -1,0 +1,35 @@
+class Auto:
+    def __init__(self, automark, auto_hind, autode_arv):
+        self.automark = automark
+        self.auto_hind = auto_hind
+        self.autode_arv = autode_arv
+    
+    def lisa_auto(self):
+        self.autode_arv += 1
+        print(f"Uus auto {self.automark} lisatud, kokku: {self.autode_arv}")
+     
+    def __str__(self):
+        return f"Automark: {self.automark}, hind: {self.auto_hind}, arv: {self.autode_arv}"
+    
+class Elektriauto(Auto):
+    def __init__(self, automark, auto_hind, autode_arv, aku_mahutavus):
+        super().__init__(automark, auto_hind, autode_arv)
+        self.aku_mahutavus = aku_mahutavus
+        
+    def __str__(self):
+        return f"Automark {self.automark}, hind: {self.auto_hind}, autode arv: {self.autode_arv}, aku mahutavus: {self.aku_mahutavus}"
+
+def main():
+    toyota_corolla = Auto("Toyota Corolla", 19999.99, 14)
+    tesla_model_s = Elektriauto("Tesla Model S", 79999.99, 3, "100 kwh")
+    print(toyota_corolla)
+    print(tesla_model_s)
+    toyota_corolla.lisa_auto()
+    tesla_model_s.lisa_auto()
+    tesla_model_s.lisa_auto()
+    print(toyota_corolla)
+    print(tesla_model_s)
+    
+if __name__ == "__main__":
+    main()
+
