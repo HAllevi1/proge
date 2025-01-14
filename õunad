@@ -1,0 +1,35 @@
+class Õun:
+    def __init__(self, nimi, värv):
+        self.nimi = nimi
+        self.värv = värv
+        
+    def muuda_värvi(self, värv):
+        self.värv = värv
+        print("Värv muutub...")
+        
+    def kilohind(self):
+        if self.värv == "roheline":
+            return 0.79
+        if self.värv == "kollane":
+            return 1.89
+        if self.värv == "punane":
+            return 2.49
+        
+    def __str__(self):
+        return f"Õun '{self.nimi}', {self.värv}, kilohind {self.kilohind()}"
+
+class Kuldrenett(Õun):
+    def __init__(self, värv, suurus):
+        super().__init__("Kuldrenett", värv)
+        self.suurus = suurus
+        
+    def kilohind(self):
+        return round(self.suurus * 0.55, 2)
+
+õun = Õun("Suislepp","roheline")
+kuldrenett = Kuldrenett("kollane", 6.5)
+
+print(f"Õuna kilo hind on {õun.kilohind()}")
+õun.muuda_värvi("punane")
+print(f"Õuna kilo hind on {õun.kilohind()}")
+print(kuldrenett)
